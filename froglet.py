@@ -1,18 +1,20 @@
 ###############################################################
-#  PyNLPl - Frog Client - Version 1.4.1
+#  
+# Froglet - A Python client for Frog - v0.1
+#       By Herman Slatman
+#       https://hermanslatman.nl
+#
+#       Licensed under GPLv3
+#
+# Original work from:
+#
+# PyNLPl - Frog Client - Version 1.4.1
 #       by Maarten van Gompel (proycon)
 #       http://ilk.uvt.nl/~mvgompel
 #       Induction for Linguistic Knowledge Research Group
 #       Universiteit van Tilburg
 #
 #       Derived from code by Rogier Kraf
-#
-#       Licensed under GPLv3
-#
-# This is a Python library for on-the-fly communication with
-# a Frog/Tadpole Server. Allowing on-the-fly lemmatisation and
-# PoS-tagging. It is recommended to pass your data on a
-# sentence-by-sentence basis to FrogClient.process()
 #
 ###############################################################
 
