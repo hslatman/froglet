@@ -6,7 +6,20 @@ A Python client for contacting a Frog server. Frog is an integration of memory-b
 
 ## Code Example
 
-TODO: nothing to see here yet.
+Assuming a Frog server is running at some IP address and known port. For now this suffices:
+
+```
+from froglet import FrogClient
+
+# replace with specific hostname or IP and port
+client = FrogClient('<hostname/ip>', '<port>')
+
+for data in client.process("Dit is een voorbeeldbericht om te froggen!"):
+    word, lemma, morph, pos = data[:4]
+	print word, lemma, morph, pos
+	
+	# do some other awesome things with the response
+```
 
 ## Motivation
 
