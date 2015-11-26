@@ -39,9 +39,10 @@ TODO: nothing to see here yet.
 
 ## Roadmap
 
-  * Asynchronous calls
   * Providing several output formats
+  * Making available for distribution
   * Implement configuration management, e.g. using a .ini file
+  * Asynchronous calls?
   * When contacting a Frog server on localhost, don't use the network, but use original Python bindings
   * A REPL, for fun
   
