@@ -22,7 +22,6 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 from __future__ import absolute_import
-from pynlpl.common import u
 
 import socket
 
@@ -46,7 +45,7 @@ class FrogClient:
 
 
 
-        input_data = u(input_data, source_encoding) #decode (or preferably do this in an earlier stage)
+        input_data = self.u(input_data, source_encoding) #decode (or preferably do this in an earlier stage)
         input_data = input_data.strip(' \t\n')
 
         s = input_data.encode(self.server_encoding) +b'\r\n'
@@ -63,7 +62,7 @@ class FrogClient:
                 data += moredata
 
 
-            data = u(data,self.server_encoding)
+            data = self.u(data,self.server_encoding)
 
 
             for line in data.strip(' \t\r\n').split('\n'):
@@ -126,6 +125,21 @@ class FrogClient:
                 alignment.append(None)
                 cursor += 1
         return alignment
+
+    def u(self, s, encoding = 'utf-8', errors='strict'):
+        #ensure s is properly unicode.. wrapper for python 2.6/2.7,
+        if version < '3':
+            #ensure the object is unicode
+            if isinstance(s, unicode):
+                return s
+            else:
+                return unicode(s, encoding,errors=errors)
+        else:
+            #will work on byte arrays
+            if isinstance(s, str):
+                return s
+            else:
+                return str(s,encoding,errors=errors)
 
 
     def __del__(self):
