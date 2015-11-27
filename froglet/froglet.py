@@ -26,7 +26,7 @@ from __future__ import absolute_import
 from sys import version
 import socket
 
-class FrogClient(object):
+class Froglet(object):
     def __init__(self, host="localhost", port=12345, server_encoding="utf-8",
                  returnall=False, timeout=120.0, ner=False):
         """Create a client connecting to a Frog or Tadpole server."""
