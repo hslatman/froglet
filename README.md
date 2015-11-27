@@ -9,10 +9,10 @@ A Python client for contacting a Frog server. Frog is an integration of memory-b
 Assuming a Frog server is running at some IP address and known port. For now this suffices:
 
 ```
-from froglet import FrogClient
+import froglet
 
 # replace with specific hostname or IP and port
-client = FrogClient('<hostname/ip>', '<port>')
+client = froglet.Froglet('<hostname/ip>', '<port>')
 
 for data in client.process("Dit is een voorbeeldbericht om te froggen!"):
     word, lemma, morph, pos = data[:4]
@@ -27,7 +27,7 @@ A Python client for Frog already [exists](https://github.com/proycon/pynlpl/blob
 
 ## Installation
 
-TODO: nothing to see here yet.
+This package is available on [PyPI](https://pypi.python.org/). Installation can be performed via the usual command you use for installing Python packages.
 
 ## API Reference
 
@@ -40,7 +40,8 @@ TODO: nothing to see here yet.
 ## Roadmap
 
   * Providing several output formats
-  * Making available for distribution
+  * Additional documentation
+  * ~~Making available for distribution~~
   * Implement configuration management, e.g. using a .ini file
   * Asynchronous calls?
   * When contacting a Frog server on localhost, don't use the network, but use original Python bindings
