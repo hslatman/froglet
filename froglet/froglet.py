@@ -28,7 +28,7 @@ import socket
 
 class Froglet(object):
     def __init__(self, host="localhost", port=12345, server_encoding="utf-8",
-                 returnall=False, timeout=120.0, ner=False):
+                 returnall=True, timeout=120.0, ner=False):
         """Create a client connecting to a Frog or Tadpole server."""
         self.buffsize = 4096
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
