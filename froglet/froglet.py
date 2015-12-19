@@ -1,6 +1,6 @@
 ###############################################################
 #
-# Froglet - A Python client for Frog - v0.1
+# Froglet - A Python client for Frog - v0.2
 #       By Herman Slatman
 #       https://hermanslatman.nl
 #
