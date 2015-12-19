@@ -1,6 +1,6 @@
 ###############################################################
 #
-# Froglet - A Python client for Frog - v0.1
+# Froglet - A Python client for Frog - v0.2
 #       By Herman Slatman
 #       https://hermanslatman.nl
 #
@@ -28,7 +28,7 @@ import socket
 
 class Froglet(object):
     def __init__(self, host="localhost", port=12345, server_encoding="utf-8",
-                 returnall=False, timeout=120.0, ner=False):
+                 returnall=True, timeout=120.0, ner=False):
         """Create a client connecting to a Frog or Tadpole server."""
         self.buffsize = 4096
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -85,12 +85,19 @@ class Froglet(object):
                             else:
                                 output.append((None, None, None, None))
                         fields = line[1:]
-                        parse1 = parse2 = ner = chunk = ""
+                        token_number = int(line[0])
+                        named_entity = chunk = confidence = token_number_head = dependency_type = ""
                         word, lemma, morph, pos = fields[0:4]
+                        if len(fields) > 4:
+                            confidence = float(fields[4])
                         if len(fields) > 5:
-                            ner = fields[5]
+                            named_entity = fields[5]
                         if len(fields) > 6:
                             chunk = fields[6]
+                        if len(fields) > 7:
+                            token_number_head = int(fields[7])
+                        if len(fields) > 8:
+                            dependency_type = fields[8]
 
                         if len(fields) < 5:
                             raise Exception("Can't process response line from Frog: ", repr(line),
@@ -98,9 +105,9 @@ class Froglet(object):
                                             str(len(fields) + 1))
 
                         if self.returnall:
-                            output.append((word, lemma, morph, pos, ner, chunk, parse1, parse2))
+                            output.append((token_number, word, lemma, morph, pos, confidence, named_entity, chunk, token_number_head, dependency_type))
                         else:
-                            output.append((word, lemma, morph, pos))
+                            output.append((token_number, word, lemma, morph, pos))
 
         return output
 
