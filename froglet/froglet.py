@@ -24,6 +24,7 @@ from __future__ import division
 from __future__ import absolute_import
 
 from sys import version
+import json
 import socket
 
 class Froglet(object):
@@ -38,7 +39,7 @@ class Froglet(object):
         self.returnall = returnall
 
 
-    def process(self, input_data, source_encoding="utf-8", return_unicode=True, oldfrog=False):
+    def process(self, input_data, source_encoding="utf-8", return_unicode=True, oldfrog=False, format=u"plain"):
         """Receives input_data in the form of a str or unicode object,
             passes this to the server, with proper consideration for the encodings,
             (word,pos,lemma,morphology), each of these is a proper unicode object
@@ -81,9 +82,9 @@ class Froglet(object):
                     if len(line) > 4 and line[0].isdigit(): #first column is token number
                         if line[0] == '1' and output:
                             if self.returnall:
-                                output.append((None, None, None, None, None, None, None, None))
+                                output.append((None,) * 10)
                             else:
-                                output.append((None, None, None, None))
+                                output.append((None,) * 5)
                         fields = line[1:]
                         token_number = int(line[0])
                         named_entity = chunk = confidence = token_number_head = dependency_type = ""
@@ -109,7 +110,14 @@ class Froglet(object):
                         else:
                             output.append((token_number, word, lemma, morph, pos))
 
-        return output
+        if format == 'json':
+            #return the output in json format
+            json_data = create_json(output)
+
+            return json_data
+        else:
+            return output
+
 
     def process_aligned(self, input_data, source_encoding="utf-8", return_unicode=True):
         output = self.process(input_data, source_encoding, return_unicode)
@@ -120,14 +128,49 @@ class Froglet(object):
             targetindex = alignment[i]
             if targetindex == None:
                 if self.returnall:
-                    yield (None, None, None, None, None, None, None, None)
+                    yield (None,) * 10
                 else:
-                    yield (None, None, None, None)
+                    yield (None,) * 5
             else:
                 yield output[targetindex]
 
     def __del__(self):
         self.socket.close()
+
+
+def create_json(processed_items):
+    result = {}
+    for item in processed_items:
+        # every item is a tuple, consisting of token number, token, lemmatized, etcetera (5 or 10 tuple)
+        # we process one line separately now...
+        # so, every token is supposed to be part of 1 sentence
+        item_dict = {}
+
+        token_number, word, lemma, morph, pos = item[:5]
+        item_dict['token_number'] = token_number # raw token number is set (Frog is 1-indexed)
+        item_dict['word'] = word
+        item_dict['lemma'] = lemma
+        item_dict['morph'] = morph
+        item_dict['pos'] = pos
+
+        if len(item) == 10:
+            confidence, named_entity, chunk, token_number_head, dependency_type = item[5:]
+            item_dict['confidence'] = confidence
+            item_dict['named_entity'] = named_entity
+            item_dict['chunk'] = chunk
+            item_dict['token_number_head'] = token_number_head
+            item_dict['dependency_type'] = dependency_type
+
+        # processing the item is complete; add it to the result
+        # the key is the token number minus 1, because 0-indexing is much nicer...
+        result[int(token_number) - 1] = item_dict
+
+    # adding some stats / diagnostics
+    result['length'] = len(processed_items)
+
+    # processing done; return result as json, sort the keys
+    return json.dumps(result, sort_keys=True)
+
 
 
 def align(inputwords, outputwords):
