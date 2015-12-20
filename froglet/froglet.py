@@ -82,9 +82,9 @@ class Froglet(object):
                     if len(line) > 4 and line[0].isdigit(): #first column is token number
                         if line[0] == '1' and output:
                             if self.returnall:
-                                output.append((None, None, None, None, None, None, None, None))
+                                output.append((None,) * 10)
                             else:
-                                output.append((None, None, None, None))
+                                output.append((None,) * 5)
                         fields = line[1:]
                         token_number = int(line[0])
                         named_entity = chunk = confidence = token_number_head = dependency_type = ""
@@ -128,9 +128,9 @@ class Froglet(object):
             targetindex = alignment[i]
             if targetindex == None:
                 if self.returnall:
-                    yield (None, None, None, None, None, None, None, None)
+                    yield (None,) * 10
                 else:
-                    yield (None, None, None, None)
+                    yield (None,) * 5
             else:
                 yield output[targetindex]
 
