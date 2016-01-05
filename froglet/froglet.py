@@ -110,11 +110,19 @@ class Froglet(object):
                         else:
                             output.append((token_number, word, lemma, morph, pos))
 
-        if format == 'json':
-            #return the output in json format
-            json_data = create_json(output)
+        if format == u"json":
+            # return the output in json format: first create dict
+            dict_tokens = create_dict(output)
 
-            return json_data
+            # then create the json dump
+            json_tokens = create_json(dict_tokens)
+
+            return json_tokens
+        elif format == u"dict":
+            # return the output in dict format
+            dict_tokens = create_dict(output)
+
+            return dict_tokens
         else:
             return output
 
@@ -138,9 +146,16 @@ class Froglet(object):
         self.socket.close()
 
 
-def create_json(processed_items):
+def create_dict(processed_tokens):
+    """Creates a Python dict describing the entire Frog output.
+    
+    Returns a dict object containing mappings to dicts describing a token.
+
+    :param processed_tokens: tokens processed by Frog
+    :type processed_tokens: list
+    """
     result = {}
-    for item in processed_items:
+    for item in processed_tokens:
         # every item is a tuple, consisting of token number, token, lemmatized, etcetera (5 or 10 tuple)
         # we process one line separately now...
         # so, every token is supposed to be part of 1 sentence
@@ -166,10 +181,19 @@ def create_json(processed_items):
         result[int(token_number) - 1] = item_dict
 
     # adding some stats / diagnostics
-    result['length'] = len(processed_items)
+    result['length'] = len(processed_tokens)
 
+    return result
+
+
+def create_json(processed_tokens):
+    """Returns json dump of tokens in dict.
+
+    :param processed_tokens: tokens processed by Frog
+    :type processed_tokens: dict
+    """
     # processing done; return result as json, sort the keys
-    return json.dumps(result, sort_keys=True)
+    return json.dumps(processed_tokens, sort_keys=True)
 
 
 
