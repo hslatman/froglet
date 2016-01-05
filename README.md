@@ -26,7 +26,7 @@ for data in client.process("Dit is een voorbeeldbericht om te froggen!"):
 # an example requesting dict output:
 dict_tokens = client.process("Dit is een voorbeeldbericht om te froggen!", format="dict")
 
-# dict_tokens contains the *length* key, which describes the number of tokens in the dict
+# dict_tokens contains the length key, which describes the number of tokens in the dict
 # see the froglet code for explanation why
 for i in xrange(dict_tokens['length']):
 	print(dict_tokens[i])
@@ -42,7 +42,7 @@ import json
 json_tokens = json.loads(json_string)
 
 # the json_data is equivalent to the dict_tokens described before
-# take care that due to deserialization the type information is lost (i.e. *str(*i*)*)
+# take care that due to deserialization the type information is lost (i.e. str(i))
 for str(i) in xrange(int(json_tokens['length'])):
     print(json_tokens[i])
 	print(json_tokens[i]['morph'])
