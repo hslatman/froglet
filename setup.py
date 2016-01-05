@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='froglet',
-      version='0.2',
+      version='0.3',
       description='Client for Frog server',
       url='https://github.com/hslatman/froglet',
       author='Herman Slatman',

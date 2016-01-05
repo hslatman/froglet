@@ -12,13 +12,40 @@ Assuming a Frog server is running at some IP address and known port. For now thi
 import froglet
 
 # replace with specific hostname or IP and port
-client = froglet.Froglet('<hostname/ip>', '<port>')
+client = froglet.Froglet("<hostname/ip>", "<port>")
 
+# default format is *plain*, which means a tuple is returned
 for data in client.process("Dit is een voorbeeldbericht om te froggen!"):
     word, lemma, morph, pos = data[:4]
-	print word, lemma, morph, pos
+	print(word, lemma, morph, pos)
 	
 	# do some other awesome things with the response
+
+
+
+# an example requesting dict output:
+dict_tokens = client.process("Dit is een voorbeeldbericht om te froggen!", format="dict")
+
+# dict_tokens contains the length key, which describes the number of tokens in the dict
+# see the froglet code for explanation why
+for i in xrange(dict_tokens['length']):
+	print(dict_tokens[i])
+	print(dict_tokens[i]['lemma'])
+
+
+
+# another example, using json output:
+json_string = client.process("Dit is een voorbeeldbericht om te froggen!", format="json")
+
+# the json is in string format, ready to be saved or deserialized
+import json
+json_tokens = json.loads(json_string)
+
+# the json_data is equivalent to the dict_tokens described before
+# take care that due to deserialization the type information is lost (i.e. str(i))
+for str(i) in xrange(int(json_tokens['length'])):
+    print(json_tokens[i])
+	print(json_tokens[i]['morph'])
 ```
 
 ## Motivation
